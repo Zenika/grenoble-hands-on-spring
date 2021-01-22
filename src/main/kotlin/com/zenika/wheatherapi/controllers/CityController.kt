@@ -1,18 +1,17 @@
 package com.zenika.wheatherapi.controllers
 
 import com.zenika.wheatherapi.model.City
-import com.zenika.wheatherapi.model.GeoPosition
+import com.zenika.wheatherapi.repositories.CityRepository
+import org.springframework.data.domain.Sort
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/api/cities")
-class CityController {
+class CityController(val cityRepository: CityRepository) {
 
     @GetMapping
-    fun getAllCities(): Collection<City> = listOf(
-        City("Grenoble", GeoPosition(5.0, 45.0)),
-        City("Lyon", GeoPosition(3.0, 47.0)),
-    )
+    fun getAllCities(): Iterable<City> = cityRepository.findAll(Sort.by("name"))
+
 }

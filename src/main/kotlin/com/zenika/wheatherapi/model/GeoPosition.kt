@@ -1,6 +1,9 @@
 package com.zenika.wheatherapi.model
 
+import javax.persistence.Embeddable
+
+@Embeddable
 data class GeoPosition(
-    val latitude: Double,
-    val longitude: Double
+    var latitude: Double,
+    var longitude: Double
 )
