@@ -5,6 +5,7 @@ import com.zenika.handson.spring.entities.City
 import com.zenika.handson.spring.entities.Weather
 import com.zenika.handson.spring.repositories.WeatherRepository
 import org.springframework.boot.web.client.RestTemplateBuilder
+import org.springframework.cache.annotation.Cacheable
 import org.springframework.stereotype.Repository
 import org.springframework.web.client.getForObject
 
@@ -14,6 +15,7 @@ class WeatherRepository7Timer(restTemplateBuilder: RestTemplateBuilder, val obje
     WeatherRepository {
     private val restTemplate = restTemplateBuilder.build()
 
+    @Cacheable(cacheNames = ["dailyWeather"])
     override fun getDailyWeather(city: City): List<Weather> {
         return getResponse(city, "civillight")
             .let { objectMapper.readValue(it, DailyWeather7Timer::class.java) }
