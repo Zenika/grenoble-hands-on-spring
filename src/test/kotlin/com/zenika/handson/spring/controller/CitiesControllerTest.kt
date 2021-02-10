@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.orm.jpa.AutoConfigureDataJpa
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.http.MediaType
+import org.springframework.security.test.context.support.WithMockUser
 import org.springframework.test.context.jdbc.Sql
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.get
@@ -43,6 +44,7 @@ internal class CitiesControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "ADMIN", roles = ["ADMIN"])
     fun `add new city return 201`() {
         mockMvc.post("/cities") {
              contentType = MediaType.APPLICATION_JSON
@@ -54,6 +56,15 @@ internal class CitiesControllerTest {
                     json(javaClass.getResource("/contract/cities/POST_CITY.json").readText())
                 }
             }
+    }
+
+    @Test
+    fun `add new city without login return 401`() {
+        mockMvc.post("/cities") {
+            contentType = MediaType.APPLICATION_JSON
+            content = javaClass.getResource("/contract/cities/POST_CITY.json").readText()
+        }
+            .andExpect { status { isForbidden() } }
     }
 
     @Test
