@@ -1,7 +1,6 @@
 package com.zenika.handson.spring.controller
 
-import com.zenika.handson.spring.entities.City
-import com.zenika.handson.spring.entities.GeoPosition
+import com.zenika.handson.spring.repositories.CitiesRepository
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -10,16 +9,12 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/cities")
-class CitiesController {
-    private val cities = listOf(
-        City("GRENOBLE", GeoPosition(45.183916, 5.703630)),
-        City("LYON", GeoPosition(45.767443, 4.858798)),
-    )
+class CitiesController(private val cityRepository: CitiesRepository) {
 
     @GetMapping
-    fun geCities() = cities
+    fun geCities() = cityRepository.findAll()
 
     @GetMapping("/{name}")
-    fun getCity(@PathVariable name: String) = cities.find { it.name == name }
+    fun getCity(@PathVariable name: String) = cityRepository.getByName(name)
         ?.let { ResponseEntity.ok(it) } ?: ResponseEntity.notFound().build()
 }
