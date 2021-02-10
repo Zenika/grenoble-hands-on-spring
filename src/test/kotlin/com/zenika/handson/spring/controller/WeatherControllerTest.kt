@@ -1,5 +1,6 @@
 package com.zenika.handson.spring.controller
 
+import com.zenika.handson.spring.repositories.inmemory.WeatherRepositoryInMemory
 import com.zenika.handson.spring.services.WeatherService
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -15,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional
 @AutoConfigureDataJpa
 @Transactional
 @Sql(scripts = ["/sql/init-cities.sql"])
-@Import(value = [WeatherService::class])
+@Import(value = [WeatherService::class, WeatherRepositoryInMemory::class])
 internal class WeatherControllerTest {
 
     @Autowired
