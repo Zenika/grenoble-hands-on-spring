@@ -4,9 +4,11 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.orm.jpa.AutoConfigureDataJpa
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
+import org.springframework.http.MediaType
 import org.springframework.test.context.jdbc.Sql
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.get
+import org.springframework.test.web.servlet.post
 import org.springframework.transaction.annotation.Transactional
 
 @WebMvcTest(controllers = [CitiesController::class])
@@ -38,6 +40,29 @@ internal class CitiesControllerTest {
                     json(javaClass.getResource("/contract/cities/GET_CITY.json").readText())
                 }
             }
+    }
+
+    @Test
+    fun `add new city return 201`() {
+        mockMvc.post("/cities") {
+             contentType = MediaType.APPLICATION_JSON
+             content = javaClass.getResource("/contract/cities/POST_CITY.json").readText()
+        }
+            .andExpect { status { isCreated() } }
+            .andExpect {
+                content {
+                    json(javaClass.getResource("/contract/cities/POST_CITY.json").readText())
+                }
+            }
+    }
+
+    @Test
+    fun `add invalid city return 400`() {
+        mockMvc.post("/cities") {
+            contentType = MediaType.APPLICATION_JSON
+            content = javaClass.getResource("/contract/cities/POST_INVALID_CITY.json").readText()
+        }
+            .andExpect { status { is4xxClientError() } }
     }
 
     @Test
