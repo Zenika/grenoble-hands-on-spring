@@ -1,9 +1,11 @@
 package com.zenika.handson.spring.controller
 
+import com.zenika.handson.spring.services.WeatherService
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.orm.jpa.AutoConfigureDataJpa
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
+import org.springframework.context.annotation.Import
 import org.springframework.test.context.jdbc.Sql
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.get
@@ -13,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional
 @AutoConfigureDataJpa
 @Transactional
 @Sql(scripts = ["/sql/init-cities.sql"])
+@Import(value = [WeatherService::class])
 internal class WeatherControllerTest {
 
     @Autowired
